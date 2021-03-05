@@ -32,6 +32,7 @@ int main()
 	return 0;
 }
 
+<<<<<<< HEAD
 
 //Exercise 1.3
 
@@ -207,3 +208,5 @@ int main() {
 	std::cout << "Area of your triangle: " << area << std::endl;
 	return 0;
 }
+=======
+>>>>>>> 807248dbbb3e01f80b04b0133b2a83e1b2d64ba5
