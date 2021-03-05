@@ -32,25 +32,3 @@ int main()
 	return 0;
 }
 
-//temp
-
-#include <iostream> 
-
-int main()
-{
-float a, b, c, d, e, f, x, y;
-std::cout << "Please input the values of a, b, c, d, e and f respectively for the system of linear equations : ax + by = c; dx + ey = f, to calculate its solution:" << std::endl;
-std::cin >> a >> b >> c >> d >> e >> f;
-if ((a * e) == (b * d))
-	std::cout << "There is no solution to this system" << std::endl;
-else 
-{
-	x = (c * e - b * f) / (a * e - b * d);
-	y = (a * f - c * d) / (a * e - b * d);
-	if (x == y)
-		std::cout << "x = y = " << x << std::endl;
-	else
-		std::cout << "x = " << x << " and y = " << y << std::endl;
-}
-return 0;
-}
