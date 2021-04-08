@@ -632,6 +632,7 @@ int precision(double number) {
 	}
 	return size;
 }
+
 double sqroot(double n, double delta, double iter, double estimate, int estimate_not_1) {
 	if ((iter == 0) || (((estimate * estimate) - n) < delta && estimate_not_1 == 1))
 		return estimate;
