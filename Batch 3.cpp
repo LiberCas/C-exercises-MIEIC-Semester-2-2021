@@ -895,3 +895,222 @@ int main() {
 	showYear(year);
 	return 0;
 }
+
+
+//3.10)
+//a)
+
+#include <iostream>
+#include <climits>
+using namespace std;
+
+unsigned int biggest_fac(unsigned long long limit) {
+	unsigned int answer = 1;
+	while (limit >= answer + 1) {
+		answer++;
+		limit /= answer;
+	}
+	return answer;
+}
+
+unsigned long long factorial_ite(unsigned int n) {
+	unsigned int limit_fac = biggest_fac(ULLONG_MAX), next_mult = 2;
+	unsigned long long n_fac = 1;
+	if (n > limit_fac) {
+		cout << "Error: Cannot calculate factorials larger than " << limit_fac << "!\n";
+		n_fac = 0;
+	}
+	else {
+		while (next_mult <= n) {
+			n_fac *= next_mult;
+			next_mult++;
+		}
+	}
+	return n_fac;
+
+}
+
+int main() {
+	int n;
+	unsigned long long n_fac;
+	cout << "Please write in a number to calculate its factorial: " << endl;
+	cin >> n;
+	n_fac = factorial_ite(n);
+	if (n_fac != 0)
+		cout << n << "! = " << n_fac << endl;
+	return 0;
+}
+
+
+//b)
+
+#include <iostream>
+#include <climits>
+using namespace std;
+
+unsigned int biggest_fac(unsigned long long limit) {
+	unsigned int answer = 1;
+	while (limit >= answer + 1) {
+		answer++;
+		limit /= answer;
+	}
+	return answer;
+}
+
+unsigned long long do_fac_rec(unsigned int n, unsigned int next_mult) {
+	if (next_mult >= n)
+		return next_mult;
+	else
+		return next_mult * do_fac_rec(n, next_mult + 1);
+}
+
+
+unsigned long long factorial_rec(unsigned int n) {
+	unsigned int limit_fac = biggest_fac(ULLONG_MAX), next_mult = 1;
+	if (n > limit_fac) {
+		cout << "Error: Cannot calculate factorials larger than " << limit_fac << "!\n";
+		return 0;
+	}
+	else
+		return do_fac_rec(n, next_mult);
+}
+
+int main() {
+	int n;
+	unsigned long long n_fac;
+	cout << "Please write in a number to calculate its factorial: " << endl;
+	cin >> n;
+	n_fac = factorial_rec(n);
+	if (n_fac != 0)
+		cout << n << "! = " << n_fac << endl;
+	return 0;
+}
+
+
+//Exercise 3.11)
+
+#include <iostream>
+using namespace std;
+
+int gcd_rec(int m, int n) {
+	if (n > m) {
+		int temp = n;
+		n = m;
+		m = temp;
+	}
+	if (m % n == 0)
+		return n;
+	else
+		return gcd_rec(n, m % n);
+}
+
+int main() {
+	int m, n;
+	cout << "Please write two numbers in the format(m n): " << endl;
+	cin >> m >> n;
+	cout << "GCD(" << m << ", " << n << ") = " << gcd_rec(m, n);
+	return 0;
+}
+
+
+//Exercise 3.12)
+
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+double PI = 3.1415;
+
+double distance(double x1, double y1, double x2, double y2) {
+	return sqrt(pow((x1 - x2), 2) + pow((y1 - y2), 2));
+}
+
+double area(double x1, double y1, double x2, double y2, double x3, double y3) {
+	double s, a, b, c;
+	a = distance(x1, y1, x2, y2);
+	b = distance(x2, y2, x3, y3);
+	c = distance(x3, y3, x1, y1);
+	s = (a + b + c) / 2;
+	return sqrt(s * (s - a) * (s - b) * (s - c));
+}
+
+double area(double radius) {
+	return (PI * pow(radius, 2));
+}
+
+double area(double x1, double y1, double x2, double y2) {
+	return abs((x1 - x2) * (y1 - y2));
+}
+
+int main() {
+	double area_of_shape;
+	int selection;
+	cout << "Which do you want to calculate? \n1) The area of a circle\n2) The area of a rectangle whose vertices are parallel to the x and y axes\n3) The area of a triangle\n\nPlease input 1, 2 or 3 to select circle, rectangle or triangle respectively:\n";
+	cin >> selection;
+	switch (selection) {
+	case 1:
+		double radius;
+		cout << "Please input the radius of the circle:\n";
+		cin >> radius;
+		area_of_shape = area(radius);
+		break;
+	case 2:
+		double x1r, y1r, x2r, y2r;
+		cout << "Please input the coordinates of two opposite vertices of the rectangle in the format(x1 y1 x2 y2):\n";
+		cin >> x1r >> y1r >> x2r >> y2r;
+		area_of_shape = area(x1r, y1r, x2r, y2r);
+		break;
+	case 3:
+		double x1, y1, x2, y2, x3, y3;
+		cout << "Pleasse input the coordinates of the three vertices of the triangle in the format(x1 y1 x2 y2 x3 y3):\n";
+		cin >> x1 >> y1 >> x2 >> y2 >> x3 >> y3;
+		area_of_shape = area(x1, y1, x2, y2, x3, y3);
+		break;
+	}
+	cout << "The area of the shape is: " << area_of_shape << endl;
+	return 0;
+}
+
+
+//Exercise 3.13)
+/*a)The function outputs a single randomly generated value between 
+"low" and "high". The assert() statement makes sure that "high" is more than 
+or equal to "low", if that is not the case, an exception is thrown*/
+
+/*b)The function can recieve no parameters, having the signature "rollDie()"
+, a single parameter of type "int", having the signature "rollDie(int limit)"
+, or two parameters of type "int", having the signature "rollDie(int low, int high)"*/
+
+/*c)No it isn't. Becasue the signature of the function "int rollDie()"
+is the same as one of the possible  signatures of the original function*/
+
+
+//Exercise 3.14)
+
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+double integrateTR(double f(double), double a, double b, int n) {
+	double h = (b - a) / n, integral = 0;
+	for (int i = 1; i <= n; i++)
+		integral += (h / 2) * (f(a + (i - 1) * h) + f(a + (i * h)));
+	return integral;
+}
+
+double g(double x) {
+	return pow(x, 2);
+}
+
+double h(double x) {
+	return sqrt(4 - pow(x, 2));
+}
+
+int main() {
+	int ag = 0, bg = 10, ah = -2, bh = 2, n;
+	cout << "Please input the number of partitions(n) for the integrals of g(x) and h(x):\n";
+	cin >> n;
+	cout << "Approximation of the integral of g(x) in " << n << " partitions = " << integrateTR(g, ag, bg, n) << endl;
+	cout << "\nApproximation of the integral of h(x) in " << n << " partitions = " << integrateTR(h, ah, bh, n) << endl;
+	return 0;
+}
