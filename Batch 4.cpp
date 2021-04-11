@@ -303,3 +303,261 @@ int main() {
 }
 
 
+//Exercise 4.3)
+//a)
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+void bubbleSort(vector<int>& v) {
+	for (int upper_index = v.size() - 1; upper_index > 0; upper_index--) {
+		for (int i = 0; i < upper_index; i++) {
+			if (v.at(i) > v.at(i + 1))
+				swap(v.at(i), v.at(i + 1));
+		}
+	}
+}
+
+int main() {
+	int i = 0, size;
+	cout << "Please input the size of your vector:\n";
+	cin >> size;
+	vector<int> v(size);
+	for (int j = 0; j < size; j++) {
+		int temp;
+		cout << "Please input the element of index " << j << " of your vector:\n";
+		cin >> temp;
+		v.at(j) = temp;
+	}
+	bubbleSort(v);
+	cout << "Here's the sorted vector: ";
+	while (i < v.size() - 1) {
+		cout << v.at(i) << " < ";
+		i++;
+	}
+	cout << v.at(i);
+	return 0;
+}
+
+
+//b)
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+void bubbleSort(vector<int>& v) {
+	for (int upper_index = v.size() - 1; upper_index > 0; upper_index--) {
+		int swap_num = 0;
+		for (int i = 0; i < upper_index; i++) {
+			if (v.at(i) > v.at(i + 1)) {
+				swap(v.at(i), v.at(i + 1));
+				swap_num++;
+			}
+		}
+		if (swap_num == 0) {
+			break;
+		}
+	}
+}
+
+int main() {
+	int i = 0, size;
+	cout << "Please input the size of your vector:\n";
+	cin >> size;
+	vector<int> v(size);
+	for (int j = 0; j < size; j++) {
+		int temp;
+		cout << "Please input the element of index " << j << " of your vector:\n";
+		cin >> temp;
+		v.at(j) = temp;
+	}
+	bubbleSort(v);
+	cout << "Here's the sorted vector: ";
+	while (i < v.size() - 1) {
+		cout << v.at(i) << " < ";
+		i++;
+	}
+	cout << v.at(i);
+	return 0;
+}
+
+
+//c)
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+void bubbleSort(vector<int>& v, char da) {
+	if (da == 'a') {
+		for (int upper_index = v.size() - 1; upper_index > 0; upper_index--) {
+			int swap_num = 0;
+			for (int i = 0; i < upper_index; i++) {
+				if (v.at(i) > v.at(i + 1)) {
+					swap(v.at(i), v.at(i + 1));
+					swap_num++;
+				}
+			}
+			if (swap_num == 0) {
+				break;
+			}
+		}
+	}
+	else {
+		for (int upper_index = v.size() - 1; upper_index > 0; upper_index--) {
+			int swap_num = 0;
+			for (int i = 0; i < upper_index; i++) {
+				if (v.at(i) < v.at(i + 1)) {
+					swap(v.at(i), v.at(i + 1));
+					swap_num++;
+				}
+			}
+			if (swap_num == 0) {
+				break;
+			}
+		}
+	}
+}
+
+int main() {
+	int i = 0, size;
+	char da;
+	cout << "Please input the size of your vector:\n";
+	cin >> size;
+	vector<int> v(size);
+	for (int j = 0; j < size; j++) {
+		int temp;
+		cout << "Please input the element of index " << j << " of your vector:\n";
+		cin >> temp;
+		v.at(j) = temp;
+	}
+	cout << "How would you like to sort your vector? (d for descending order/a for ascending order):\n";
+	cin >> da;
+	bubbleSort(v, da);
+	cout << "Here's the sorted vector: ";
+	if (da == 'a')
+		da = '<';
+	else
+		da = '>';
+	while (i < v.size() - 1) {
+		cout << v.at(i) << " " << da << " ";
+		i++;
+	}
+	cout << v.at(i);
+	return 0;
+}
+
+
+//d)
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+bool ascending(int x, int y) {
+	if (y >= x)
+		return true;
+	else
+		return false;
+}
+
+bool descending(int x, int y) {
+	if (y <= x)
+		return true;
+	else
+		return false;
+}
+
+void bubbleSort(vector<int>& v, bool f(int x, int y)) {
+	for (int upper_index = v.size() - 1; upper_index > 0; upper_index--) {
+		int swap_num = 0;
+		for (int i = 0; i < upper_index; i++) {
+			if (!f(v.at(i), v.at(i + 1))) {
+				swap(v.at(i), v.at(i + 1));
+				swap_num++;
+			}
+		}
+		if (swap_num == 0) {
+			break;
+		}
+	}
+}
+
+int main() {
+	char da;
+	int i = 0, size;
+	cout << "Please input the size of your vector:\n";
+	cin >> size;
+	vector<int> v(size);
+	for (int j = 0; j < size; j++) {
+		int temp;
+		cout << "Please input the element of index " << j << " of your vector:\n";
+		cin >> temp;
+		v.at(j) = temp;
+	}
+	cout << "How would you like to sort your vector? (d for descending order/a for ascending order):\n";
+	cin >> da;
+	if (da == 'a')
+		bubbleSort(v, ascending);
+	else
+		bubbleSort(v, descending);
+	cout << "Here's the sorted vector: ";
+	if (da == 'a')
+		da = '<';
+	else
+		da = '>';
+	while (i < v.size() - 1) {
+		cout << v.at(i) << " " << da << " ";
+		i++;
+	}
+	cout << v.at(i);
+	return 0;
+}
+
+
+//Exercise 4.4)
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int binarySearch(const vector<int>& v, int value) {
+	int first = 0, last = v.size() - 1, middle;
+	bool found = 0;
+	while (found == 0 && first <= last) {
+		middle = floor((first + last) / 2);
+		if (v.at(middle) == value)
+			found = 1;
+		else if (value > v.at(middle))
+			first = middle + 1;
+		else
+			last = middle - 1;
+	}
+	if (found == 0)
+		return -1;
+	else
+		return middle;
+}
+
+int main() {
+	int size, value, index;
+	cout << "Please input the size of your vector:\n";
+	cin >> size;
+	vector<int> v(size);
+	for (int j = 0; j < size; j++) {
+		int temp;
+		cout << "Please input the element of index " << j << " of your vector(sorted in ascending order):\n";
+		cin >> temp;
+		v.at(j) = temp;
+	}
+	cout << "Which value would you like to find in the vector:\n";
+	cin >> value;
+	index = binarySearch(v, value);
+	if (index == -1)
+		cout << "The value cannot be found in the vector";
+	else
+		cout << "The value can be found in the position of index " << index << endl;
+	return 0;
+}
