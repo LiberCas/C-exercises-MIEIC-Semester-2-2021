@@ -561,3 +561,242 @@ int main() {
 		cout << "The value can be found in the position of index " << index << endl;
 	return 0;
 }
+
+
+//Exercise 4.5)
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+void removeDuplicates(vector<int>& v) {
+	for (int i = 0; i < v.size(); i++) {
+		int value = v.at(i);
+		for (int j = i + 1; j < v.size(); j++) {
+			if (v.at(j) == value) {
+				for (int k = j; k < v.size() - 1; k++)
+					v.at(k) = v.at(k + 1);
+				v.resize(v.size() - 1);
+				j--;
+			}
+		}
+	}
+}
+
+int main() {
+	int size, i = 0;
+	cout << "Please input the size of your vector:\n";
+	cin >> size;
+	vector<int> v(size);
+	for (int j = 0; j < size; j++) {
+		cout << "Please input the element of index " << j << " of your vector:\n";
+		cin >> v.at(j);
+	}
+	removeDuplicates(v);
+	cout << "Here's your vector with all duplicates removed:\n";
+	while (i < v.size() - 1) {
+		cout << v.at(i) << ", ";
+		i++;
+	}
+	cout << v.at(i) << endl;
+	return 0;
+}
+
+
+//Exercise 4.6)
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int binarySearch(const vector<int>& v, int value) {
+	int first = 0, last = v.size() - 1, middle;
+	bool found = 0;
+	while (found == 0 && first <= last) {
+		middle = floor((first + last) / 2);
+		if (v.at(middle) == value)
+			found = 1;
+		else if (value > v.at(middle))
+			first = middle + 1;
+		else
+			last = middle - 1;
+	}
+	if (found == 0)
+		return -1;
+	else
+		return middle;
+}
+
+void bubbleSortAscending(vector<int>& v) {
+	for (int upper_index = v.size() - 1; upper_index > 0; upper_index--) {
+		int swap_num = 0;
+		for (int i = 0; i < upper_index; i++) {
+			if (v.at(i) > v.at(i + 1)) {
+				swap(v.at(i), v.at(i + 1));
+				swap_num++;
+			}
+		}
+		if (swap_num == 0) {
+			break;
+		}
+	}
+}
+
+void removeDuplicates(vector<int>& v) {
+	for (int i = 0; i < v.size(); i++) {
+		int value = v.at(i);
+		for (int j = i + 1; j < v.size(); j++) {
+			if (v.at(j) == value) {
+				for (int k = j; k < v.size() - 1; k++)
+					v.at(k) = v.at(k + 1);
+				v.resize(v.size() - 1);
+				j--;
+			}
+		}
+	}
+}
+
+void vectorUnion(const vector<int>& v1, const vector<int>& v2, vector<int>& v3) {
+	for (int i = 0; i < v1.size(); i++) {
+		v3.push_back(1);
+		v3.at(i) = v1.at(i);
+	}
+	for (int i = 0; i < v2.size(); i++) {
+		v3.push_back(1);
+		v3.at(v1.size() + i) = v2.at(i);
+	}
+	removeDuplicates(v3);
+	bubbleSortAscending(v3);
+}
+void vectorIntersection(vector<int>& v1, vector<int>& v2, vector<int>& v3) {
+	int v3_index = 0;
+	removeDuplicates(v1);
+	bubbleSortAscending(v1);
+	bubbleSortAscending(v2);
+	for (int i = 0; i < v1.size(); i++) {
+		if (binarySearch(v2, v1.at(i)) != -1) {
+			v3.push_back(1);
+			v3.at(v3_index) = v1.at(i);
+			v3_index++;
+		}
+	}
+}
+
+int main() {
+	vector <int> v3_union(0), v3_intersection(0);
+	int size1, size2, i = 0, k = 0;
+	cout << "Please input the size of your first vector:\n";
+	cin >> size1;
+	vector<int> v1(size1);
+	for (int j = 0; j < size1; j++) {
+		cout << "Please input the element of index " << j << " of your first vector:\n";
+		cin >> v1.at(j);
+	}
+	cout << "Please input the size of your second vector:\n";
+	cin >> size2;
+	vector<int> v2(size2);
+	for (int j = 0; j < size2; j++) {
+		cout << "Please input the element of index " << j << " of your second vector:\n";
+		cin >> v2.at(j);
+	}
+	vectorUnion(v1, v2, v3_union);
+	vectorIntersection(v1, v2, v3_intersection);
+	cout << "Here's the union of the two vectors: ";
+	while (i < v3_union.size() - 1) {
+		cout << v3_union.at(i) << ", ";
+		i++;
+	}
+	cout << v3_union.at(i) << endl;
+	cout << "\nHere's the intersection of the two vectors: ";
+	while (k < v3_intersection.size() - 1) {
+		cout << v3_intersection.at(k) << ", ";
+		k++;
+	}
+	cout << v3_intersection.at(k) << endl;
+	return 0;
+}
+
+
+//Exercise 4.7)
+//a)
+
+#include <iostream>
+using namespace std;
+
+const int NE = 5;
+
+void localMax(const int a[][NE]) {
+	for (int i = 0; i < NE; i++) {
+		for (int j = 0; j < NE; j++) {
+			if (i != 0 && j != 0 && i != NE - 1 && j != NE - 1) {
+				if (a[i][j] > a[i - 1][j - 1] && a[i][j] > a[i - 1][j] &&
+					a[i][j] > a[i - 1][j + 1] && a[i][j] > a[i][j - 1] &&
+					a[i][j] > a[i][j + 1] && a[i][j] > a[i + 1][j - 1] &&
+					a[i][j] > a[i + 1][j] && a[i][j] > a[i + 1][j + 1])
+					cout << "Local maximum found at location i = " << i <<
+					", j = " << j << " . Value = " << a[i][j] << endl;
+			}
+		}
+	}
+}
+
+int main() {
+	int example_array[][NE] = { {7, 3, 4, 1, 3}, {2, 9, 6, 2, 1}, {1, 3, 5, 1, 4},{6, 5, 2, 7, 5}, {4, 2, 1, 3, 6} };
+	localMax(example_array);
+	return 0;
+}
+
+
+//b)
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+const int NE = 5;
+
+void localMax(vector< vector<int> >& a, bool full) {
+	if (full) {
+		for (int i = 0; i < NE; i++) {
+			for (int j = 0; j < NE; j++) {
+				if (i != 0 && j != 0 && i != NE - 1 && j != NE - 1) {
+					if (a[i][j] > a[i - 1][j - 1] &&
+						a[i][j] > a[i - 1][j] &&
+						a[i][j] > a[i - 1][j + 1] &&
+						a[i][j] > a[i][j - 1] &&
+						a[i][j] > a[i][j + 1] &&
+						a[i][j] > a[i + 1][j - 1] &&
+						a[i][j] > a[i + 1][j] &&
+						a[i][j] > a[i + 1][j + 1])
+						cout << "Local maximum found at location i = " << i <<
+						", j = " << j << " . Value = " << a[i][j] << endl;
+				}
+			}
+		}
+	}
+	else {
+		for (int i = 0; i < NE; i++) {
+			for (int j = 0; j < NE; j++) {
+				if ((i == 0 || j == 0 || a[i][j] > a[i - 1][j - 1]) &&
+					(i == 0 || a[i][j] > a[i - 1][j]) &&
+					(i == 0 || j == NE - 1 || a[i][j] > a[i - 1][j + 1]) &&
+					(j == 0 || a[i][j] > a[i][j - 1]) &&
+					(j == NE - 1 || a[i][j] > a[i][j + 1]) &&
+					(i == NE - 1 || j == 0 || a[i][j] > a[i + 1][j - 1]) &&
+					(i == NE - 1 || a[i][j] > a[i + 1][j]) &&
+					(i == NE - 1 || j == NE - 1 || a[i][j] > a[i + 1][j + 1]))
+					cout << "Local maximum found at location i = " << i <<
+					", j = " << j << " . Value = " << a[i][j] << endl;
+			}
+		}
+	}
+}
+
+int main() {
+	vector <vector <int>> example_vector = { {7, 3, 4, 1, 3}, {2, 9, 6, 2, 1}, {1, 3, 5, 1, 4},{6, 5, 2, 7, 5}, {4, 2, 1, 3, 6} };
+	cout << "All the full maxima:\n\n";
+	localMax(example_vector, 1);
+	cout << "\nAll the partial maxima:\n\n";
+	localMax(example_vector, 0);
+	return 0;
+}
