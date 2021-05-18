@@ -800,3 +800,285 @@ int main() {
 	localMax(example_vector, 0);
 	return 0;
 }
+
+
+//Exercise 4.9)
+
+/*The first programme will output the value 2 four times
+The second programme will output the values 1 and 2 followed by the address where the value
+of y is stored in memory twice and then the value of y(2) twice*/
+
+
+//Exercise 4.10)
+
+//values[1] - Signifies the element of index 1(second element) of the array values[]
+//values+1 - Adds the size of one int to the address of the first elemnt of the array values[]
+//, in other words, it means the address of the second element of the array values[]
+//*p - Indicates the value stored in the location pointed to by the int pointer p, the second
+//element of the array values[]
+//*(values+3) - Indicates the fourth element of the array values[]
+//p+1 - Indicates the address of the next int after the address pointed to by p, in other words,
+//the address of the third element of the array values[]
+//p[1] - Indicates the contents of the next int after the address pointed to by p, 
+//in other words, the third element of the array values[]
+//p - values - 1
+
+
+//Exercise 4.11)
+//a)
+
+#include <iostream>
+using namespace std;
+
+int compare(const void* a, const void* b) {
+	return (*(int*)a - *(int*)b);
+}
+
+
+int main()
+{
+	int arr[] = { 1, 5, 2, 12, 2, 3, 5, 9, 4 };
+	qsort(arr, 9, sizeof(int), compare);
+	for (int i = 0; i < 9; i++)
+		cout << arr[i] << " ";
+	return 0;
+}
+
+
+//b)
+
+#include <iostream>
+using namespace std;
+
+int compare(const void* a, const void* b) {
+	return (*(int*)b - *(int*)a);
+}
+
+
+int main()
+{
+	int arr[] = { 1, 5, 2, 12, 2, 3, 5, 9, 4 };
+	qsort(arr, 9, sizeof(int), compare);
+	for (int i = 0; i < 9; i++)
+		cout << arr[i] << " ";
+	return 0;
+}
+
+
+//c)
+
+
+//Exercise 4.12)
+//a.1)
+
+#include <iostream>
+using namespace std;
+
+void readArray(int* p, size_t nElem) {
+	for (unsigned int i = 0; i < nElem; i++)
+		cout << "\nElement of index " << i << ": " << p[i];
+}
+
+int main() {
+	int nElem;
+	int* p;
+	cout << "Please input the number of elements of your array:\n";
+	cin >> nElem;
+	p = (int*)malloc(nElem * sizeof(int));
+	for (unsigned int i = 0; i < nElem; i++) {
+		int temp;
+		cout << "Please input the element of index " << i << " of your array:\n";
+		cin >> temp;
+		p[i] = temp;
+	}
+	readArray(p, nElem);
+	free(p);
+	return 0;
+}
+
+
+//a.2)
+
+#include <iostream>
+using namespace std;
+
+int findValueInArray(const int* a, size_t nElem, int value, size_t pos1, size_t pos2) {
+	for (unsigned int i = pos1; (i <= pos2 && i < nElem); i++) {
+		if (a[i] == value)
+			return i;
+	}
+	return -1;
+
+}
+
+int main() {
+	int nElem, value, pos1, pos2, index;
+	int* p;
+	cout << "Please input the number of elements of your array:\n";
+	cin >> nElem;
+	p = (int*)malloc(nElem * sizeof(int));
+	for (unsigned int i = 0; i < nElem; i++) {
+		int temp;
+		cout << "Please input the element of index " << i << " of your array:\n";
+		cin >> temp;
+		p[i] = temp;
+	}
+	cout << "What value would you like to find the first instance of in this array?\n";
+	cin >> value;
+	cout << "Between what positions(input in the format: pos1 pos2)?\n";
+	cin >> pos1 >> pos2;
+	index = findValueInArray(p, 7, value, pos1, pos2);
+	if (index == -1)
+		cout << "The value " << value << " cannot be found in the array between the positions inputted\n";
+	else
+		cout << "The value " << value << " is first found in the array in the position of index " << index << endl;
+	free(p);
+	return 0;
+}
+
+
+//a.3)
+
+#include <iostream>
+using namespace std;
+
+size_t findMultValuesInArray(const int* a, size_t nElem, int value, size_t pos1, size_t pos2, int* index) {
+	int counter = 0;
+	for (unsigned int i = pos1; (i <= pos2 && i < nElem); i++) {
+		if (a[i] == value) {
+			realloc(index, (counter + 1) * sizeof(int));
+			index[counter] = i;
+			counter++;
+		}
+	}
+	return counter;
+}
+
+int main() {
+	int nElem, value, pos1, pos2, counter, i = 0;
+	int* p;
+	int* indexes;
+	cout << "Please input the number of elements of your array:\n";
+	cin >> nElem;
+	indexes = (int*)malloc(0);
+	p = (int*)malloc(nElem * sizeof(int));
+	for (unsigned int i = 0; i < nElem; i++) {
+		int temp;
+		cout << "Please input the element of index " << i << " of your array:\n";
+		cin >> temp;
+		p[i] = temp;
+	}
+	cout << "What value would you like to find instances of in this array?\n";
+	cin >> value;
+	cout << "Between what positions(input in the format: pos1 pos2)?\n";
+	cin >> pos1 >> pos2;
+	counter = findMultValuesInArray(p, 7, value, pos1, pos2, indexes);
+	cout << "The value " << value << " can be found " << counter << " times in the array";
+	if (counter > 0) {
+		cout << ", in the postitions: ";
+		while (i < counter - 1) {
+			cout << indexes[i] << ", ";
+			i++;
+		}
+		cout << indexes[i] << endl;
+	}
+	return 0;
+}
+
+
+//b.1)
+
+#include <iostream>
+using namespace std;
+
+int findValueInArray(const int* pos1, const int* pos2, int value) {
+	for (int i = 0; pos1 + i <= pos2; i++) {
+		if (*(pos1 + i) == value)
+			return i;
+	}
+	return -1;
+
+}
+
+int main() {
+	int nElem, value, pos1, pos2, index;
+	int* p;
+	cout << "Please input the number of elements of your array:\n";
+	cin >> nElem;
+	p = (int*)malloc(nElem * sizeof(int));
+	for (unsigned int i = 0; i < nElem; i++) {
+		int temp;
+		cout << "Please input the element of index " << i << " of your array:\n";
+		cin >> temp;
+		p[i] = temp;
+	}
+	cout << "What value would you like to find the first instance of in this array?\n";
+	cin >> value;
+	cout << "Between what positions(input in the format: pos1 pos2)?\n";
+	cin >> pos1 >> pos2;
+	if (pos2 > nElem - 1) {
+		pos2 = nElem - 1;
+	}
+	index = findValueInArray(p + pos1, p + pos2, value);
+	if (index == -1)
+		cout << "The value " << value << " cannot be found in the array between the positions inputted\n";
+	else
+		cout << "The value " << value << " is first found in the array in the position of index " << index << endl;
+	free(p);
+	return 0;
+}
+
+
+//b.2)
+
+#include <iostream>
+using namespace std;
+
+int findMultValuesInArray(const int* pos1, const int* pos2, int value, int* index) {
+	int counter = 0;
+	for (int i = 0; pos1 + i <= pos2; i++) {
+		if (*(pos1 + i) == value) {
+			counter++;
+			realloc(index, counter * sizeof(int));
+			index[counter - 1] = i;
+		}
+	}
+	if (counter == 0)
+		counter--;
+	return counter;
+
+}
+
+int main() {
+	int nElem, value, pos1, pos2, counter, i = 0;
+	int* p;
+	int* indexes;
+	indexes = (int*)malloc(0);
+	cout << "Please input the number of elements of your array:\n";
+	cin >> nElem;
+	p = (int*)malloc(nElem * sizeof(int));
+	for (unsigned int i = 0; i < nElem; i++) {
+		int temp;
+		cout << "Please input the element of index " << i << " of your array:\n";
+		cin >> temp;
+		p[i] = temp;
+	}
+	cout << "What value would you like to find instances of in this array?\n";
+	cin >> value;
+	cout << "Between what positions(input in the format: pos1 pos2)?\n";
+	cin >> pos1 >> pos2;
+	if (pos2 > nElem - 1) {
+		pos2 = nElem - 1;
+	}
+	counter = findMultValuesInArray(p + pos1, p + pos2, value, indexes);
+	cout << "The value " << value << " can be found " << counter << " times in the array";
+	if (counter > 0) {
+		cout << ", in the postitions: ";
+		while (i < counter - 1) {
+			cout << indexes[i] << ", ";
+			i++;
+		}
+		cout << indexes[i] << endl;
+	}
+	return 0;
+}
