@@ -1,0 +1,1 @@
+up202000001;Pedro Silva;15.1;17.2;13;up202000002;Ana Cruz;20;14;7.2;up202000003;Carlos Moreira;17;15.8;6;up202000004;Margarida Souza;6.5;6;5.2;up202000005;Paulo Costa;20;6;9.1;up202000006;Matheus Soares;6.2;14;12.2;up202000007;Caio Brito;4;3.1;9.1;up202000008;Maria Cunha;20;10;9;up202000009;Joao Faria;20;12;11;up202000010;Angelo Mota;8;4.4;15

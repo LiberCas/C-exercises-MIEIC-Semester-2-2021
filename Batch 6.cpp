@@ -1037,27 +1037,6 @@ void showAboveAverageStudents(ostream& stream, vector<Student> vec) {
 
 }
 
-Student readStudentData() {
-    char trash;
-    string  code, name;
-    double shortExam, project, exam;
-    cout << "Student Code?\n";
-    cin >> code;
-    cout << "Student Name?\n";
-    cin.clear();
-    cin.ignore(1000, '\n');
-    getline(cin, name);
-    Student temp(code, name);
-    cout << "Short exam grade?\n";
-    cin >> shortExam;
-    cout << "Project grade ?\n";
-    cin >> project;
-    cout << "Exam grade ?\n";
-    cin >> exam;
-    temp.setGrades(shortExam, project, exam);
-    return temp;
-}
-
 int main()
 {
     Student stu1("1", "I L", 18, 17, 7);
@@ -1180,7 +1159,6 @@ void showAboveAverageStudents(ostream& stream, vector<Student> vec) {
 }
 
 Student readStudentData() {
-    char trash;
     string  code, name;
     double shortExam, project, exam;
     cout << "Student Code?\n";
@@ -1189,36 +1167,161 @@ Student readStudentData() {
     cin.clear();
     cin.ignore(1000, '\n');
     getline(cin, name);
-    Student temp(code, name);
     cout << "Short exam grade?\n";
     cin >> shortExam;
     cout << "Project grade ?\n";
     cin >> project;
     cout << "Exam grade ?\n";
     cin >> exam;
-    temp.setGrades(shortExam, project, exam);
-    return temp;
+    return Student(code, name, shortExam, project, exam);
 }
 
 int main()
 {
     vector<Student> stu_vec;
-    while (cin) {
-        string code, name;
-        cout << "Code?\n";
-        double shortExam, project, exam;
-        cin >> code;
-        cout << "Name?\n";
-        getline(cin, name);
-        cout << "Short Exam Grade?\n";
-        cin >> shortExam;
-        cout << "Project Grade?\n";
-        cin >> project;
-        cout << "Exam Grade?\n";
-        cin >> exam;
-        Student stu(code, name, shortExam, project, exam);
-        stu_vec.push_back(1);
+    while (true) {
+        char selection;
+        stu_vec.push_back(readStudentData());
+        cout << "Press '0' to exit. Press any other key to enter another student.\n";
+        cin >> selection;
+        if (selection == '0')
+            break;
     }
     showAboveAverageStudents(cout, stu_vec);
     return 0;
 }
+
+
+//e)
+
+#include <string>
+#include <sstream>
+#include <fstream>
+#include <vector>
+using namespace std;
+
+class Student {
+public:
+    Student();
+    Student(const string& code, const string& name);
+    Student(const string& code, const string& name, double shortExam, double project, double exam);
+    void setGrades(double shortExam, double project, double exam);
+    string getCode() const;
+    string getName() const;
+    int getFinalGrade() const;
+    // other get and set methods
+    bool isApproved() const; // is the student approved or not ?
+    static int weightShortExam, weightProject, weightExam; // weights in percentage (ex:20,30,50)
+private:
+    string code; // student code
+    string name; // student complete name
+    double shortExam, project, exam; // grades obtained by the student in the different components
+    int finalGrade;
+};
+
+int Student::weightShortExam = 20;
+int Student::weightProject = 30;
+int Student::weightExam = 50;
+
+
+Student::Student() {
+    code = "";
+    name = "";
+    shortExam = 0;
+    project = 0;
+    exam = 0;
+    finalGrade = 0;
+}
+
+Student::Student(const string& code, const string& name) {
+    this->code = code;
+    this->name = name;
+    shortExam = 0;
+    project = 0;
+    exam = 0;
+    finalGrade = 0;
+}
+
+Student::Student(const string& code, const string& name, double shortExam, double project, double exam) {
+    this->code = code;
+    this->name = name;
+    setGrades(shortExam, project, exam);
+}
+
+void Student::setGrades(double shortExam, double project, double exam) {
+    this->shortExam = shortExam;
+    this->project = project;
+    this->exam = exam;
+    double temp = ((weightShortExam * shortExam) + (weightProject * project) + (weightExam * exam)) / 100;
+    if (temp - (int)temp > 0.49999999)
+        temp += 0.6;
+    finalGrade = (int)temp;
+}
+
+string Student::getCode() const {
+    return code;
+}
+
+string Student::getName() const {
+    return name;
+}
+
+int Student::getFinalGrade() const {
+    return finalGrade;
+}
+
+bool Student::isApproved() const {
+    if (finalGrade >= 10)
+        return 1;
+    return 0;
+}
+
+double getGradeAverage(vector<Student> vec) {
+    double finalGradeAverage = 0;
+    for (int i = 0; i < vec.size(); i++) {
+        finalGradeAverage += vec[i].getFinalGrade();
+    }
+    finalGradeAverage /= vec.size();
+    return finalGradeAverage;
+}
+
+void showAboveAverageStudents(ostream& stream, vector<Student> vec) {
+    double finalGradeAverage = getGradeAverage(vec);
+    for (int i = 0; i < vec.size(); i++) {
+        if (vec[i].getFinalGrade() > finalGradeAverage) {
+            stream << vec[i].getName() << " - " << vec[i].getCode() << " - " << vec[i].getFinalGrade() << endl;
+        }
+    }
+
+}
+
+Student readStudentData(istream& allstudents) {
+    string code, name, shortExam, project, exam;
+    getline(allstudents, code, ';');
+    if (code == "")
+        return Student();
+    getline(allstudents, name, ';');
+    getline(allstudents, shortExam, ';');
+    getline(allstudents, project, ';');
+    getline(allstudents, exam, ';');
+    return Student(code, name, stod(shortExam), stod(project), stod(exam));
+}
+
+int main()
+{
+    ofstream file("file.txt");
+    ifstream allstudents("6.2e.txt");
+    vector<Student> stu_vec;
+    while (allstudents.is_open()) {
+        Student stu = readStudentData(allstudents);
+        if (stu.getCode() == "")
+            break;
+        stu_vec.push_back(stu);
+    }
+    showAboveAverageStudents(file, stu_vec);
+    return 0;
+}
+
+
+//Exercise 6.3)
+
