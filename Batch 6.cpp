@@ -1323,5 +1323,31 @@ int main()
 }
 
 
-//Exercise 6.3)
+//Exercise 6.7)
 
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+template <typename t>
+vector <t> minMax(vector <t> vec) {
+    vector <t> ret = { vec[0], vec[0] };
+    for (int i = 1; i < vec.size(); i++) {
+        if (vec[i] < ret[0])
+            ret[0] = vec[i];
+        if (vec[i] > ret[1])
+            ret[1] = vec[i];
+    }
+    return ret;
+}
+
+int main() {
+    vector<int> ints = { 6, 17, 3, 9, -3, -1, 14, 2, 12 };
+    vector<int> r1 = minMax(ints);
+    vector<char> chars = { 'r', 'G', 's', 'a', 'A', 'X', 'm', 'M', 'v' };
+    vector<char> r2 = minMax(chars);
+    cout << r1[0] << " : " << r1[1] << endl;
+    cout << r2[0] << " : " << r2[1] << endl;
+    return 0;
+}
